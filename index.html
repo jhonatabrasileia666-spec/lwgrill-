@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260918-1320-cardapio-scroll-fix">
+<meta name="app-build" content="20260918-1323-sticky-categories">
 <meta name="theme-color" content="#f8f3e8">
   <title>LW Grill House | Hambúrguer artesanal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,6 +70,30 @@
     @media(max-width:370px){.paint--hero{width:550px;right:-177px;top:-29px}.paint--menu{left:-298px}}
   
     .checkout-fields{display:grid;gap:10px;margin:22px 0 4px}.checkout-fields label{display:grid;gap:6px;color:#655b4e;font-size:10px;font-weight:700;text-transform:uppercase}.checkout-fields input,.checkout-fields select{width:100%;padding:11px 12px;border:1px solid var(--line);background:#fbf7ed;color:var(--ink);font:12px 'DM Sans',sans-serif;outline:none}.checkout-fields input:focus,.checkout-fields select:focus{border-color:var(--fire);box-shadow:0 0 0 2px rgba(233,91,45,.1)}.checkout-fields .row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.checkout[disabled]{opacity:.58;cursor:wait}.sync-status{display:block;margin:10px 0 0;color:#887c68;font-size:10px}.sync-status.ok{color:#4b9657}.sync-status.error{color:#b0472b}@media(max-width:460px){.checkout-fields .row{grid-template-columns:1fr}}
+
+    /* Category selector follows the scroll while the customer browses the menu. */
+    .app{overflow-x:hidden;overflow-y:visible}
+    .categories{
+      position:sticky;
+      top:72px;
+      z-index:4;
+      margin:18px 0 24px;
+      padding:12px 0;
+      background:rgba(248,243,232,.94);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(56,43,21,.10);
+      box-shadow:0 8px 18px rgba(38,32,24,.04);
+    }
+    @media(max-width:760px){
+      .categories{
+        top:64px;
+        margin:14px -18px 20px;
+        padding:10px 18px;
+        width:calc(100% + 36px);
+      }
+    }
+
 </style>
 </head>
 <body>
