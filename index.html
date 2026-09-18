@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260918-1330-sticky-real-fix">
+<meta name="app-build" content="20260918-1332-fixed-header-floating-categories">
 <meta name="theme-color" content="#f8f3e8">
   <title>LW Grill House | Hambúrguer artesanal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -118,6 +118,51 @@
       html,body{overflow-x:hidden}
     }
 
+
+    /* Robust floating header + menu categories (mobile/browser-safe). */
+    body{padding-top:72px}
+    header{
+      position:fixed!important;
+      top:0!important;
+      left:0!important;
+      right:0!important;
+      width:100%!important;
+      max-width:1240px!important;
+      margin:0 auto!important;
+      z-index:50!important;
+    }
+    .categories{
+      position:relative!important;
+      top:auto!important;
+      z-index:1!important;
+      margin:18px 0 24px!important;
+    }
+    .categories-spacer{height:0}
+    .categories.is-floating{
+      position:fixed!important;
+      top:72px!important;
+      left:0!important;
+      right:0!important;
+      width:100%!important;
+      max-width:none!important;
+      z-index:49!important;
+      margin:0!important;
+      padding:11px max(32px,calc((100vw - 1240px)/2 + 32px))!important;
+      background:rgba(248,243,232,.97)!important;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(56,43,21,.12);
+      box-shadow:0 5px 14px rgba(38,32,24,.06);
+    }
+    @media(max-width:760px){
+      body{padding-top:64px}
+      .categories{margin:14px 0 20px!important;width:auto!important;padding:0!important}
+      .categories.is-floating{
+        top:64px!important;
+        padding:10px 18px!important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -125,7 +170,7 @@
   <header><a class="brand" href="#inicio"><span class="brand-mark">LW</span><span><b>GRILL HOUSE</b><small>HAMBURGUER ARTESANAL</small></span></a><div class="status" id="store-public-status"><span class="dot"></span>Carregando horário...</div><button class="cart-button" id="open-cart"><span>Pedido</span><strong id="cart-count">0</strong></button></header>
   <main>
     <section class="hero" id="inicio"><div class="paint paint--edge" aria-hidden="true"></div><div class="hero-copy"><p class="eyebrow">Epitaciolândia, AC</p><h1>Brasa acesa.<br><em>Fome resolvida.</em></h1><p class="hero-text">Hambúrguer artesanal feito na hora, com ingredientes de verdade e aquele sabor que vira vício.</p><a class="primary" id="view-menu" href="#cardapio">Ver cardápio →</a><div class="hero-meta"><span id="store-public-hours">◷ 18h–23h</span><span>Entrega e retirada</span></div></div><div class="hero-photo"><div class="paint paint--hero" aria-hidden="true"></div><div class="photo-label">Hambúrguer artesanal</div><img src="assets/burgers/tudao-v2.jpg" alt="Hambúrguer artesanal com queijo e salada"></div></section>
-    <section class="menu" id="cardapio"><div class="paint paint--menu" aria-hidden="true"></div><div class="paint paint--menu-end" aria-hidden="true"></div><div class="heading"><div><p class="eyebrow">Feito com calma. Servido com pressa.</p><h2>Escolha sua fome</h2></div><span class="count" id="count">0 itens</span></div><nav class="categories" id="categories"></nav><div class="grid" id="products"></div></section>
+    <section class="menu" id="cardapio"><div class="paint paint--menu" aria-hidden="true"></div><div class="paint paint--menu-end" aria-hidden="true"></div><div class="heading"><div><p class="eyebrow">Feito com calma. Servido com pressa.</p><h2>Escolha sua fome</h2></div><span class="count" id="count">0 itens</span></div><div class="categories-spacer" id="categories-spacer" aria-hidden="true"></div><nav class="categories" id="categories"></nav><div class="grid" id="products"></div></section>
   </main>
   <footer><div class="paint paint--footer" aria-hidden="true"></div><strong>LW GRILL HOUSE</strong><span>Praça Vinte e Oito de Abril · Epitaciolândia</span><span>(68) 99253-8784</span></footer>
 </div>
@@ -205,6 +250,32 @@ function syncCheckoutDraft(){const name=$('customer-name'),phone=$('customer-pho
 async function finalizarPedido(){syncCheckoutDraft();const button=$('checkout'),status=$('sync-status');if(!menuOnline){showToast('Sistema de pedidos indisponível');return}await Promise.all([carregarStatusLoja(),carregarRegioesEntrega()]);if(!storeConfig.aceitando_pedidos){showToast('A loja está fechada agora');showCart();return}const validItems=Object.entries(cart).map(([key,q])=>({key,q:Number(q),info:itemInfo(key)})).filter(x=>x.info&&x.q>0);if(!validItems.length)return;if(checkoutDraft.nome.trim().length<3){showToast('Digite seu nome para continuar');return}if(checkoutDraft.telefone.replace(/\D/g,'').length<10){showToast('Digite um WhatsApp válido');return}if(checkoutDraft.entrega==='entrega'&&checkoutDraft.endereco.trim().length<8){showToast('Digite o endereço da entrega');return}if(checkoutDraft.entrega==='entrega'&&deliveryRegions.length&&!selectedRegion()){showToast('Escolha a região de entrega');showCart();return}const trocoText=String(checkoutDraft.troco||'').replace(',','.').trim();const troco=checkoutDraft.pagamento==='dinheiro'&&trocoText?Number(trocoText):null;if(trocoText&&(!Number.isFinite(troco)||troco<=0)){showToast('Digite um valor válido para o troco');return}button.disabled=true;button.textContent='Enviando pedido...';if(status){status.className='sync-status';status.textContent='Registrando pedido no painel...'}try{const payload=validItems.map(({info,q})=>({produto_id:info.p.id,variante_id:info.v?.id||null,quantidade:q}));const region=selectedRegion();const {data,error}=await sb.rpc('criar_pedido_publico_v3',{p_cliente_nome:checkoutDraft.nome.trim(),p_cliente_telefone:checkoutDraft.telefone.trim(),p_observacoes:checkoutDraft.observacao.trim()||null,p_forma_entrega:checkoutDraft.entrega,p_endereco_entrega:checkoutDraft.entrega==='entrega'?checkoutDraft.endereco.trim():null,p_regiao_entrega_id:checkoutDraft.entrega==='entrega'?(region?.id||null):null,p_forma_pagamento:checkoutDraft.pagamento,p_troco_para:troco,p_itens:payload});if(error)throw error;const subtotal=validItems.reduce((a,{info,q})=>a+info.price*q,0);const fee=checkoutFee();const total=subtotal+fee;const itensTexto=validItems.map(({info,q})=>`${q}x ${info.p.name}${info.v&&info.v.name!=='Padrão'?` (${info.v.name})`:''} - ${money(info.price*q)}`).join('\n');const pedidoCurto=String(data||'').split('-')[0].toUpperCase();const detalhesEntrega=checkoutDraft.entrega==='entrega'?`Entrega: ${checkoutDraft.endereco.trim()}${region?`\nRegião: ${region.nome}`:''}${fee>0?`\nTaxa de entrega: ${money(fee)}`:''}`:'Retirada no local';const pagamento=({pix:'Pix',dinheiro:'Dinheiro',cartao:'Cartão'})[checkoutDraft.pagamento]||checkoutDraft.pagamento;const trocoLinha=checkoutDraft.pagamento==='dinheiro'&&troco?`\nTroco para: ${money(troco)}`:'';const mensagem=`Olá, LW Grill House!\n\nPedido #${pedidoCurto}\nCliente: ${checkoutDraft.nome.trim()}\n${detalhesEntrega}\nPagamento: ${pagamento}${trocoLinha}\n\n${itensTexto}\n\nTotal: ${money(total)}${checkoutDraft.observacao.trim()?`\nObservação: ${checkoutDraft.observacao.trim()}`:''}`;cart={};updateCount();checkoutDraft.troco='';if(status){status.className='sync-status ok';status.textContent='Pedido registrado no painel.'}showToast(`Pedido #${pedidoCurto} enviado`);setTimeout(()=>{window.open(`https://wa.me/${storeConfig.whatsapp||'5568992538784'}?text=${encodeURIComponent(mensagem)}`,'_blank');$('cart').hidden=true},250)}catch(err){console.error('Falha ao criar pedido:',err);const msg=String(err?.message||'');if(status){status.className='sync-status error';status.textContent=msg||'Não foi possível registrar. Tente novamente.'}showToast(msg||'Não foi possível enviar o pedido');button.disabled=false;button.textContent='Confirmar pedido →'}}
 document.addEventListener('input',e=>{if(['customer-name','customer-phone','delivery-address','change-for','note'].includes(e.target.id))syncCheckoutDraft()});
 document.addEventListener('change',e=>{if(e.target.id==='delivery-type'){syncCheckoutDraft();if(e.target.value!=='entrega')checkoutDraft.regiao='';showCart();return}if(e.target.id==='delivery-region'){syncCheckoutDraft();showCart();return}if(e.target.id==='payment-type'){syncCheckoutDraft();if(e.target.value!=='dinheiro')checkoutDraft.troco='';showCart();return}if(e.target.id==='detail-variant'){const p=productById(e.target.closest('.sheet')?.querySelector('[data-detail-add]')?.dataset.detailAdd);const v=variantById(p,e.target.value);if(v&&$('detail-price'))$('detail-price').textContent=money(v.price)}});
+const categoriesBar=document.getElementById('categories');
+const categoriesSpacer=document.getElementById('categories-spacer');
+const menuSection=document.getElementById('cardapio');
+function updateFloatingBars(){
+  const header=document.querySelector('header');
+  if(!header||!categoriesBar||!categoriesSpacer||!menuSection)return;
+  const headerH=header.offsetHeight||64;
+  const catH=categoriesBar.offsetHeight||52;
+  const menuRect=menuSection.getBoundingClientRect();
+  const spacerRect=categoriesSpacer.getBoundingClientRect();
+  const shouldFloat=spacerRect.top<=headerH && menuRect.bottom>(headerH+catH+12);
+  categoriesBar.classList.toggle('is-floating',shouldFloat);
+  categoriesSpacer.style.height=shouldFloat?(catH+'px'):'0px';
+}
+let floatingBarsFrame=0;
+function scheduleFloatingBars(){
+  if(floatingBarsFrame)return;
+  floatingBarsFrame=requestAnimationFrame(()=>{
+    updateFloatingBars();
+    floatingBarsFrame=0;
+  });
+}
+window.addEventListener('scroll',scheduleFloatingBars,{passive:true});
+window.addEventListener('resize',scheduleFloatingBars);
+setTimeout(updateFloatingBars,0);
+
 const viewMenuBtn=document.getElementById('view-menu');
 if(viewMenuBtn){
   viewMenuBtn.addEventListener('click',e=>{
