@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260918-0237-photo-fix-v2">
+<meta name="app-build" content="20260918-1118-burgers-14">
 <meta name="theme-color" content="#f8f3e8">
   <title>LW Grill House | Hambúrguer artesanal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,8 +94,12 @@ let products=[
 {id:'toscana',cat:'hamburgueres',name:'Burger Toscana',desc:'Pão, hambúrguer artesanal, queijo, mussarela, hambúrguer de toscana, bacon, cebola caramelizada, alface e tomate',price:26,img:'assets/burgers/toscana.webp',tag:'toscana + bacon'},
 {id:'bacon',cat:'hamburgueres',name:'Burger Bacon',desc:'Pão, hambúrguer artesanal, queijo, mussarela, bacon, cebola caramelizada, alface e tomate',price:20,img:'assets/burgers/bacon-v2.jpg',tag:'bacon'},
 {id:'tudao',cat:'hamburgueres',name:'Burger Tudão',desc:'Pão, 2 hambúrgueres artesanais, queijo, mussarela, bacon, calabresa, catupiry, banana, cebola caramelizada, alface e tomate',price:32,img:'assets/burgers/tudao-v2.jpg',tag:'o maior da casa'},
-{id:'coalho',cat:'hamburgueres',name:'Burger Queijo Coalho',desc:'Pão, hambúrguer artesanal, queijo coalho, mel, alface e tomate',price:27,img:'assets/burgers/coalho.webp',tag:'queijo coalho + mel'},
-];
+{id:'coalho',cat:'hamburgueres',name:'Burger Coalho',desc:'Pão, hambúrguer artesanal, queijo coalho, mel, alface e tomate',price:27,img:'assets/burgers/coalho-v2.jpg',tag:'queijo coalho + mel'},
+{id:'file-mignon',cat:'hamburgueres',name:'Burger Filé Mignon',desc:'Pão, hambúrguer artesanal, filé mignon desfiado, queijo, mussarela, catupiry, cebola caramelizada, alface e tomate',price:32,img:'assets/burgers/file-mignon.jpg',tag:'filé mignon'},
+{id:'duplo-cheddar',cat:'hamburgueres',name:'Burger Duplo Cheddar',desc:'Pão, 2 hambúrgueres artesanais, queijo, mussarela, bacon, cheddar, cebola caramelizada, alface e tomate',price:28,img:'assets/burgers/duplo-cheddar.jpg',tag:'duplo cheddar'},
+{id:'egg',cat:'hamburgueres',name:'Burger Egg',desc:'Pão, hambúrguer artesanal, queijo, mussarela, ovo, cebola caramelizada, alface e tomate',price:16,img:'assets/burgers/egg.jpg',tag:'egg'},
+{id:'master',cat:'hamburgueres',name:'Burger Master',desc:'Pão, 3 hambúrgueres artesanais, queijo, mussarela, cebola caramelizada, alface e tomate',price:30,img:'assets/burgers/master.jpg',tag:'3 hambúrgueres'},
+]
 products=products.filter(p=>p.cat==='hamburgueres');let fallbackProducts=products.map(p=>({...p,variants:[]}));let categories=[['todos','Hambúrgueres']];let category='todos',cart=JSON.parse(localStorage.getItem('lw-cart')||'{}');const money=v=>`R$ ${Number(v||0).toFixed(2).replace('.',',')}`;const $=id=>document.getElementById(id);
 const SUPABASE_URL='https://vtvpxyjgiesnagjoqjdb.supabase.co';const SUPABASE_KEY='sb_publishable_ZpdZJMLzjj7tySviJcrKlw_EYGIJDu2';const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);const fallbackTags=Object.fromEntries(products.map(p=>[p.name,p.tag]));let menuOnline=false;let deliveryRegions=[];let storeConfig={aceitando_pedidos:true,aberta_manual:true,taxa_entrega:0,horario_abertura:'18:00',horario_fechamento:'23:00',whatsapp:'5568992538784'};let checkoutDraft={nome:localStorage.getItem('lw-customer-name')||'',telefone:localStorage.getItem('lw-customer-phone')||'',entrega:'retirada',endereco:'',regiao:localStorage.getItem('lw-customer-region')||'',pagamento:localStorage.getItem('lw-customer-payment')||'pix',troco:'',observacao:''};
 const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
