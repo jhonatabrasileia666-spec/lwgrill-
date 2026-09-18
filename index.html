@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-build" content="20260917-2358-real-burgers">
+<meta name="app-build" content="20260918-0237-photo-fix-v2">
 <meta name="theme-color" content="#f8f3e8">
   <title>LW Grill House | Hambúrguer artesanal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,7 +76,7 @@
 <div class="app">
   <header><a class="brand" href="#inicio"><span class="brand-mark">LW</span><span><b>GRILL HOUSE</b><small>HAMBURGUER ARTESANAL</small></span></a><div class="status" id="store-public-status"><span class="dot"></span>Carregando horário...</div><button class="cart-button" id="open-cart"><span>Pedido</span><strong id="cart-count">0</strong></button></header>
   <main>
-    <section class="hero" id="inicio"><div class="paint paint--edge" aria-hidden="true"></div><div class="hero-copy"><p class="eyebrow">Epitaciolândia, AC</p><h1>Brasa acesa.<br><em>Fome resolvida.</em></h1><p class="hero-text">Hambúrguer artesanal feito na hora, com ingredientes de verdade e aquele sabor que vira vício.</p><a class="primary" href="#cardapio">Ver cardápio →</a><div class="hero-meta"><span id="store-public-hours">◷ 18h–23h</span><span>Entrega e retirada</span></div></div><div class="hero-photo"><div class="paint paint--hero" aria-hidden="true"></div><div class="photo-label">Hambúrguer artesanal</div><img src="assets/burgers/tudao.webp" alt="Hambúrguer artesanal com queijo e salada"></div></section>
+    <section class="hero" id="inicio"><div class="paint paint--edge" aria-hidden="true"></div><div class="hero-copy"><p class="eyebrow">Epitaciolândia, AC</p><h1>Brasa acesa.<br><em>Fome resolvida.</em></h1><p class="hero-text">Hambúrguer artesanal feito na hora, com ingredientes de verdade e aquele sabor que vira vício.</p><a class="primary" href="#cardapio">Ver cardápio →</a><div class="hero-meta"><span id="store-public-hours">◷ 18h–23h</span><span>Entrega e retirada</span></div></div><div class="hero-photo"><div class="paint paint--hero" aria-hidden="true"></div><div class="photo-label">Hambúrguer artesanal</div><img src="assets/burgers/tudao-v2.jpg" alt="Hambúrguer artesanal com queijo e salada"></div></section>
     <section class="menu" id="cardapio"><div class="paint paint--menu" aria-hidden="true"></div><div class="paint paint--menu-end" aria-hidden="true"></div><div class="heading"><div><p class="eyebrow">Feito com calma. Servido com pressa.</p><h2>Escolha sua fome</h2></div><span class="count" id="count">0 itens</span></div><nav class="categories" id="categories"></nav><div class="grid" id="products"></div></section>
   </main>
   <footer><div class="paint paint--footer" aria-hidden="true"></div><strong>LW GRILL HOUSE</strong><span>Praça Vinte e Oito de Abril · Epitaciolândia</span><span>(68) 99253-8784</span></footer>
@@ -92,8 +92,8 @@ let products=[
 {id:'calabresa',cat:'hamburgueres',name:'Burger Calabresa',desc:'Pão, hambúrguer artesanal, queijo, mussarela, calabresa, cebola caramelizada, alface e tomate',price:20,img:'assets/burgers/calabresa.webp',tag:'calabresa'},
 {id:'duplo',cat:'hamburgueres',name:'Burger Duplo',desc:'Pão, 2 hambúrgueres artesanais, queijo, mussarela, cebola caramelizada, alface e tomate',price:24,img:'assets/burgers/duplo.webp',tag:'duplo'},
 {id:'toscana',cat:'hamburgueres',name:'Burger Toscana',desc:'Pão, hambúrguer artesanal, queijo, mussarela, hambúrguer de toscana, bacon, cebola caramelizada, alface e tomate',price:26,img:'assets/burgers/toscana.webp',tag:'toscana + bacon'},
-{id:'bacon',cat:'hamburgueres',name:'Burger Bacon',desc:'Pão, hambúrguer artesanal, queijo, mussarela, bacon, cebola caramelizada, alface e tomate',price:20,img:'assets/burgers/bacon.webp',tag:'bacon'},
-{id:'tudao',cat:'hamburgueres',name:'Burger Tudão',desc:'Pão, 2 hambúrgueres artesanais, queijo, mussarela, bacon, calabresa, catupiry, banana, cebola caramelizada, alface e tomate',price:32,img:'assets/burgers/tudao.webp',tag:'o maior da casa'},
+{id:'bacon',cat:'hamburgueres',name:'Burger Bacon',desc:'Pão, hambúrguer artesanal, queijo, mussarela, bacon, cebola caramelizada, alface e tomate',price:20,img:'assets/burgers/bacon-v2.jpg',tag:'bacon'},
+{id:'tudao',cat:'hamburgueres',name:'Burger Tudão',desc:'Pão, 2 hambúrgueres artesanais, queijo, mussarela, bacon, calabresa, catupiry, banana, cebola caramelizada, alface e tomate',price:32,img:'assets/burgers/tudao-v2.jpg',tag:'o maior da casa'},
 {id:'coalho',cat:'hamburgueres',name:'Burger Queijo Coalho',desc:'Pão, hambúrguer artesanal, queijo coalho, mel, alface e tomate',price:27,img:'assets/burgers/coalho.webp',tag:'queijo coalho + mel'},
 ];
 products=products.filter(p=>p.cat==='hamburgueres');let fallbackProducts=products.map(p=>({...p,variants:[]}));let categories=[['todos','Hambúrgueres']];let category='todos',cart=JSON.parse(localStorage.getItem('lw-cart')||'{}');const money=v=>`R$ ${Number(v||0).toFixed(2).replace('.',',')}`;const $=id=>document.getElementById(id);
